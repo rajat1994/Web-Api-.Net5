@@ -3,6 +3,8 @@ using Catalog.Repositories;
 using System.Collections.Generic;
 using Catalog.Entities;
 using System;
+using Catalog.Dtos;
+using System.Linq;
 
 
 namespace Catalog.Controllers
@@ -23,15 +25,15 @@ namespace Catalog.Controllers
 
 
         [HttpGet]
-        public IEnumerable<Item> GetItems()
+        public IEnumerable<ItemDto> GetItems()
         {
 
-            var items = repository.GetItems();
+            var items = repository.GetItems().Select(item => item.AsDto());
             return items;
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Item> GetItem(Guid id)
+        public ActionResult<ItemDto> GetItem(Guid id)
         {
 
             var item = repository.GetItem(id);
@@ -40,7 +42,7 @@ namespace Catalog.Controllers
                 return NotFound();
             }
 
-            return Ok(item);
+            return Ok(item.AsDto());
 
         }
 
